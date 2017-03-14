@@ -161,3 +161,13 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+/.vs
+/.vs
+/.vs/VMultiDll/v15/Browse.VC.db
+/.vs/VMultiDll/v15
+/.vs/VMultiDll/v15/Solution.VC.db-wal
+/.vs/VMultiDll/v15/Solution.VC.db-shm
+/.vs/VMultiDll/v15/Solution.VC.db
+/.vs/VMultiDll/v15/Browse.VC.opendb
+/.vs/VMultiDll/v15/Browse.VC.db
+/.vs/VMultiDll/v15

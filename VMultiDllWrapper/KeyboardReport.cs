@@ -126,7 +126,7 @@ namespace VMultiDllWrapper
         RWin = 128
     }
 
-    public class KeyboardReport
+    internal class KeyboardReport
     {
         private const byte KBD_KEY_CODES = 6;
         private HashSet<KeyboardModifier> modifiers;

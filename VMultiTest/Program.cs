@@ -1,75 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Input;
 using VMultiDllWrapper;
 
 namespace VMultiTest
 {
     class Program
     {
+        [DllImport("user32.dll")]
+        static extern bool GetCursorPos(ref Point lpPoint);
         static void Main(string[] args)
         {
+            Mouse s = new Mouse();
 
-            VMulti vmulti = new VMulti();
-            Console.WriteLine("Connect: " + vmulti.connect());
+            Console.WriteLine(s.Init());
 
-            System.Threading.Thread.Sleep(3000);
+            Console.WriteLine("Testing Mouse.");
+            Thread.Sleep(3000);
+            s.MouseMove(30, 500);
+            Thread.Sleep(1000);
+            s.MouseMoveRalative(500, 500);
+            Thread.Sleep(20);
+            //s.LeftDown();
+            //Thread.Sleep(20);
+            //s.LeftUp();
+            //s.Wheel(3);
 
-            keyboardTest(vmulti);
+            KeyBoard keyboard = new KeyBoard();
+            keyboard.Init();
+
+            Console.WriteLine("Testing KeyBoard.");
+            System.Diagnostics.Process.Start("notepad.exe");
+            Thread.Sleep(3000);
+            Console.WriteLine("Press A");
+            keyboard.KeyDown(KeyboardKey.A);
+            Thread.Sleep(20);
+            keyboard.KeyUp(KeyboardKey.A);
+            Thread.Sleep(20);
 
 
-            vmulti.disconnect();
+            Console.WriteLine("as same as this");
+            keyboard.KeyPress(KeyboardKey.A);
+
+            keyboard.KeyDown(KeyboardKey.Tab, KeyboardModifier.LAlt);
+            Thread.Sleep(20);
+            keyboard.KeyUp(KeyboardKey.Tab, KeyboardModifier.LAlt);
+            Console.ReadKey();
         }
 
         [DllImport("USER32.dll")]
         static extern short GetKeyState(int nVirtKey);
-
-        private static void keyboardTest(VMulti vmulti)
-        {
-            System.Diagnostics.Process.Start("notepad.exe");
-
-            System.Threading.Thread.Sleep(3000);
-
-            KeyboardReport report = new KeyboardReport();
-
-            report.keyDown(KeyboardKey.H);
-            vmulti.updateKeyboard(report);
-            report.keyUp(KeyboardKey.H);
-            report.keyDown(KeyboardKey.E);
-            vmulti.updateKeyboard(report);
-            report.keyUp(KeyboardKey.E);
-            report.keyDown(KeyboardKey.L);
-            vmulti.updateKeyboard(report);
-            report.keyUp(KeyboardKey.L);
-            vmulti.updateKeyboard(report);
-            report.keyDown(KeyboardKey.L);
-            vmulti.updateKeyboard(report);
-            report.keyUp(KeyboardKey.L);
-            report.keyDown(KeyboardKey.O);
-            vmulti.updateKeyboard(report);
-            report.keyUp(KeyboardKey.O);
-            report.keyDown(KeyboardModifier.LShift);
-            report.keyDown(KeyboardKey.Number1);
-            vmulti.updateKeyboard(report);
-            report.keyUp(KeyboardModifier.LShift);
-            report.keyUp(KeyboardKey.Number1);
-            vmulti.updateKeyboard(report);
-
-            System.Threading.Thread.Sleep(4000);
-            report.keyDown(KeyboardModifier.LWin);
-            report.keyDown(KeyboardKey.D);
-            vmulti.updateKeyboard(report);
-            report.keyUp(KeyboardModifier.LWin);
-            report.keyUp(KeyboardKey.D);
-            vmulti.updateKeyboard(report);
-        }
-
+      
         private void joystickTest(VMulti vmulti)
         {
             double i = 0;
@@ -119,8 +103,7 @@ namespace VMultiTest
                 bool upPressed = Convert.ToBoolean(GetKeyState(0x26) & 0x8000);
                 if (upPressed)
                     y -= 10;
-
-
+                
                 if (spacePressed)
                 {
                     Console.WriteLine("pressed");
